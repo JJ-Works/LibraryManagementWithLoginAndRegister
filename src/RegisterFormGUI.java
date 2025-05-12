@@ -3,6 +3,8 @@ import constants.CommonConstants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -67,10 +69,40 @@ public class RegisterFormGUI extends guis.Form {
         registerButton.setBackground(CommonConstants.SECONDARY_COLOR);
         registerButton.setForeground(CommonConstants.TEXT_COLOR);
         registerButton.setFont(new Font("Dialog", Font.BOLD, 18));
-
-        // Set cursor to hand cursor
         registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
 
+                String password = new String(passwordField.getPassword());
+
+                String rePassword = new String(reenterPasswordField.getPassword());
+
+                //Aba validate user password
+                if (validateUserInput(username,password,rePassword)){
+                    //If condition true we register to the DB and then we dispose this window
+
+                    if(db.MyJDBC.register(username, password)){
+                        RegisterFormGUI.this.dispose();
+
+                        /*We have to create this manually meaning we can't just do new guis.Login...... because the setVisible is a method and inorder
+                          to use the method we must create an object and since RegisterFormGUI doesn't have constructor we Cannot do that like
+                          LoginFormGUI as it has constructor that calls upon the method getGuiComponents();
+                        * */
+                        guis.LoginFormGUI loginFormGUI = new guis.LoginFormGUI();
+
+                        JOptionPane.showMessageDialog(loginFormGUI, "Registration Successful");
+                        loginFormGUI.setVisible(true);
+                    }else {
+                        JOptionPane.showMessageDialog(RegisterFormGUI.this,"Error: Username Already Taken!!");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(RegisterFormGUI.this,"Username must be at least 6 characters \n"
+                    + "and/or Password must match");
+                }
+            }
+        });
         // Add the button to the container
         add(registerButton);
 
@@ -95,4 +127,17 @@ public class RegisterFormGUI extends guis.Form {
         // Add the label to the container
         add(loginLabel);
     }
+
+    private boolean validateUserInput(String username,String password,String reenterPassword){
+
+        if (username.isEmpty() || password.isEmpty() || reenterPassword.isEmpty())
+            return false;
+        else if (username.length() < 6)
+            return false;
+        else if (!password.equals(reenterPassword))
+            return false;
+        else
+            return true;
+    }
+
 }

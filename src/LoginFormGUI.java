@@ -4,6 +4,8 @@ import constants.CommonConstants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -50,17 +52,39 @@ public class LoginFormGUI extends guis.Form {
         passwordField.setBounds(50, 280, 400, 30);
         add(passwordField);
 
-        // Add a button
+        //Add button
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(200, 350, 120, 40);
         loginButton.setBackground(CommonConstants.SECONDARY_COLOR);
         loginButton.setForeground(CommonConstants.TEXT_COLOR);
         loginButton.setFont(new Font("Dialog", Font.BOLD, 18));
-
-// Set cursor to hand cursor
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
 
-// Add the button to the container
+                String password = new String(passwordField.getPassword());
+
+                // Aba validate garna paryo
+
+                if (db.MyJDBC.validateLogin(username,password)){
+                    JOptionPane.showMessageDialog(LoginFormGUI.this,"Login Successful!");
+
+                    //we need to open the Library management gui
+                    //But first we need to close the LoginGUI
+
+                    LoginFormGUI.this.dispose();
+
+                    guis.LibraryManagementGUI libraryManagementGUI = new guis.LibraryManagementGUI();
+                    libraryManagementGUI.setVisible(true);
+                } else{
+                    JOptionPane.showMessageDialog(LoginFormGUI.this,"Failed to Login!");
+                }
+            }
+        });
+
+
         add(loginButton);
 
         JLabel registerLabel = new JLabel("Not a user? Register");
