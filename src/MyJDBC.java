@@ -4,10 +4,13 @@ package db;
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import constants.CommonConstants;
+import model.Book;
 
 import javax.imageio.metadata.IIOInvalidTreeException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 public class MyJDBC {
     // Objective
@@ -69,6 +72,84 @@ public class MyJDBC {
         }
 
         return true;
+    }
+
+    public static boolean insertBook(int book_id, String book_name,String book_author,String book_genre, String book_description){
+        try(
+            //to connect to the database
+            Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
+                                    CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+
+                PreparedStatement insertBook = connection.prepareStatement(
+                        "INSERT INTO " + CommonConstants.DB_BOOKS_TABLE_NAME + "(book_id, book_name, book_author, book_genre, book_description)" + "VALUES(?, ?, ?, ?, ?)"
+                )){
+
+                //TO INSERT PARAMETER IN THE INSERT QUERY
+                insertBook.setInt(1, book_id);
+                insertBook.setString(2, book_name);
+                insertBook.setString(3, book_author);
+                insertBook.setString(4, book_genre);
+                insertBook.setString(5, book_description);
+
+                // Instead of executeQuery we can use executeUpdate because executeQuery is usually used for select
+                insertBook.executeUpdate();
+                return true;
+            }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+        return false;
+    }
+
+    public static boolean updateBook(int book_id, String name, String author, String genre, String description) {
+        try (Connection connection = DriverManager.getConnection(CommonConstants.DB_URL, CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+             PreparedStatement stmt = connection.prepareStatement(
+                     "UPDATE " + CommonConstants.DB_BOOKS_TABLE_NAME + " SET book_name=?, book_author=?, book_genre=?, book_description=? WHERE book_id=?"
+             )) {
+            stmt.setString(1, name);
+            stmt.setString(2, author);
+            stmt.setString(3, genre);
+            stmt.setString(4, description);
+            stmt.setInt(5, book_id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteBook(int book_id) {
+        try (Connection connection = DriverManager.getConnection(CommonConstants.DB_URL, CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+             PreparedStatement stmt = connection.prepareStatement(
+                     "DELETE FROM " + CommonConstants.DB_BOOKS_TABLE_NAME + " WHERE book_id=?"
+             )) {
+            stmt.setInt(1, book_id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static List<Book> getAllBooks() {
+        List<Book> books = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(CommonConstants.DB_URL, CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + CommonConstants.DB_BOOKS_TABLE_NAME)) {
+            while (rs.next()) {
+                books.add(new Book(
+                        rs.getInt("book_id"),
+                        rs.getString("book_name"),
+                        rs.getString("book_author"),
+                        rs.getString("book_genre"),
+                        rs.getString("book_description")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
     }
 
     public static boolean validateLogin(String username, String password){
