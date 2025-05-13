@@ -1,11 +1,8 @@
 package db;
-//Our gateway for accessing mysql database
-
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import constants.CommonConstants;
 import model.Book;
-
 import javax.imageio.metadata.IIOInvalidTreeException;
 import java.sql.*;
 import java.util.ArrayList;

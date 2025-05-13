@@ -1,7 +1,5 @@
 package guis;
-
 import constants.CommonConstants;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -12,13 +10,11 @@ public class LibraryManagementGUI extends guis.Form {
     private JPanel rightPanel;
     private JButton viewAllButton;
     private JScrollPane scrollPane;
-
     public LibraryManagementGUI() {
         super("Book Management");
         setSize(1140, 740);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
         JLabel titleLabel = new JLabel("Book Management System", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -46,8 +42,6 @@ public class LibraryManagementGUI extends guis.Form {
         addBookLabel.setFont(new Font("Arial", Font.BOLD, 20));
         addBookLabel.setBounds(20, 10, 200, 30);
         leftPanel.add(addBookLabel);
-
-
 
         JLabel bookIdLabel = new JLabel("Book ID:");
         bookIdLabel.setBounds(20, 50, 100, 25);
@@ -193,8 +187,6 @@ public class LibraryManagementGUI extends guis.Form {
                 }
             }
         });
-
-
         leftPanel.add(bookIdLabel);
         leftPanel.add(bookIdField);
         leftPanel.add(bookNameLabel);
@@ -215,12 +207,10 @@ public class LibraryManagementGUI extends guis.Form {
         scrollPane.setBounds(420, 10, 670, 540);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.black,2,true));
 
-
         JLabel inventoryLabel = new JLabel("Inventory");
         inventoryLabel.setBorder(BorderFactory.createEmptyBorder(4, 10, 0, 0)); // Top and bottom padding
         inventoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
         inventoryLabel.setFont(new Font("Arial",Font.BOLD,20));
-
 
         rightPanel.add(inventoryLabel);
         contentPanel.add(leftPanel);
