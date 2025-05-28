@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 public class LoginFormGUI extends guis.Form {
     public LoginFormGUI(){
         super("Login");
+
+
         addGuiComponents();
     }
 

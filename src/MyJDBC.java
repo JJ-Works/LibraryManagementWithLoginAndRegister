@@ -124,7 +124,7 @@ public class MyJDBC {
             stmt.setInt(1, book_id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+             e.printStackTrace();
         }
         return false;
     }

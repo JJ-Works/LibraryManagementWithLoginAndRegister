@@ -16,7 +16,7 @@ public class AppLauncher {
 //                System.out.println(db.MyJDBC.checkUser("username123"));
 
 //                System.out.println(db.MyJDBC.register("James Moriarty","Sherlock"));
-                System.out.println(db.MyJDBC.validateLogin("James Moriarty","Sherlock"));
+                System.out.println("Returned value is "+ db.MyJDBC.validateLogin("James Moriarty","Sherlock"));
             }
         });
     }
